@@ -1,25 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import FriendsList from "./Components/FriendsList";
+import AddFriend from "./Components/AddFriend";
+import Button from "./Components/Button";
+import SplitBill from "./Components/SplitBill";
+import { useState } from "react";
+import { initialFriends } from "./Components/FriendsList";
 
-function App() {
+export default function App() {
+  const [addFriendWindow, setAddfriendWindow] = useState(false);
+
+  const [friends, setFriends] = useState(initialFriends);
+
+  const handleShowFriend = () => {
+    setAddfriendWindow((window) => !window);
+  };
+  const handlerAddFriend = (friend) => {
+    setFriends((friends) => [...friends, friend]);
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <div className="sidebar">
+        <FriendsList friends={friends} />
+        {addFriendWindow && <AddFriend onAddFriend={handlerAddFriend} />}
+        <Button onClick={handleShowFriend}>
+          {addFriendWindow ? "Close" : "Add friend"}
+        </Button>
+      </div>
+      <div className="form-split-bill">
+        <SplitBill />
+      </div>
     </div>
   );
 }
-
-export default App;
