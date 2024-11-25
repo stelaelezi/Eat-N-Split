@@ -21,35 +21,44 @@ export const initialFriends = [
   },
 ];
 
-const FriendsList = ({ friends }) => {
+const FriendsList = ({ friends, onSelection, selectedFriend }) => {
   return (
     <ul>
       {friends.map((friend) => (
-        <Friend friend={friend} key={friend.id} />
+        <Friend
+          friend={friend}
+          key={friend.id}
+          onSelection={onSelection}
+          selectedFriend={selectedFriend}
+        />
       ))}
     </ul>
   );
 };
-const Friend = ({ friend }) => {
-  const formattedBalance = Math.abs(friend.balance);
+const Friend = ({ friend, onSelection, selectedFriend }) => {
+  // c Handle case when selectedFriend is undefined or null
+  const isSelected = selectedFriend?.id === friend.id;
+  console.log(friend);
   return (
-    <li>
+    <li className={isSelected ? "selected" : ""}>
       <h3>{friend.name}</h3>
       <img src={friend.image} alt={friend.name} />
       {friend.balance < 0 && (
         <p className="red">
-          You owe {friend.name} {formattedBalance} $
+          You owe {friend.name} {Math.abs(friend.balance)} $
         </p>
       )}
       {friend.balance > 0 && (
         <p className="green">
-          {friend.name} owes you {friend.balance} $
+          {friend.name} owes you {Math.abs(friend.balance)} $
         </p>
       )}
       {friend.balance === 0 && (
         <p className="grey">You and {friend.name} are even</p>
       )}
-      <Button>Select</Button>
+      <Button onClick={() => onSelection(friend)}>
+        {isSelected ? "Close" : "Select"}
+      </Button>
     </li>
   );
 };
